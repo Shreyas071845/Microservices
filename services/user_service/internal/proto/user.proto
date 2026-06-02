@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package user;
+
+option go_package = "user_service/internal/proto";
+
+message User {
+  string id = 1;
+  string name = 2;
+  string email = 3;
+}
+
+message CreateUserRequest {
+  string name = 1;
+  string email = 2;
+}
+message CreateUserResponse { User user = 1; }
+
+message GetUserRequest { string id = 1; }
+message GetUserResponse { User user = 1; }
+
+message ListUsersRequest {}
+message ListUsersResponse { repeated User users = 1; }
+
+message UpdateUserRequest {
+  string id = 1;
+  string name = 2;
+  string email = 3;
+}
+message UpdateUserResponse { User user = 1; }
+
+message DeleteUserRequest { string id = 1; }
+message DeleteUserResponse { string message = 1; }
+
+service UserService {
+  rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);
+  rpc GetUser(GetUserRequest) returns (GetUserResponse);
+  rpc ListUsers(ListUsersRequest) returns (ListUsersResponse);
+  rpc UpdateUser(UpdateUserRequest) returns (UpdateUserResponse);
+  rpc DeleteUser(DeleteUserRequest) returns (DeleteUserResponse);
+}

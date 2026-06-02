@@ -1,0 +1,88 @@
+# ==========================================
+# USER TYPES
+# ==========================================
+type User {
+  id:    ID!
+  name:  String!
+  email: String!
+}
+
+input CreateUserInput {
+  name:  String!
+  email: String!
+}
+
+input UpdateUserInput {
+  name:  String
+  email: String
+}
+
+# ==========================================
+# ORDER TYPES
+# ==========================================
+type Order {
+  id:          ID!
+  userId:      ID!
+  productName: String!
+  quantity:    Int!
+  status:      String!
+}
+
+input CreateOrderInput {
+  userId:      ID!
+  productName: String!
+  quantity:    Int!
+}
+
+input UpdateOrderInput {
+  productName: String
+  quantity:    Int
+  status:      String
+}
+
+# ==========================================
+# TRACKING TYPES
+# ==========================================
+type OrderTracking {
+  id:       ID!
+  orderId:  ID!
+  status:   String!
+  location: String!
+}
+
+input UpdateTrackingInput {
+  orderId:  ID!
+  status:   String!
+  location: String!
+}
+
+# ==========================================
+# ROOT OPERATIONS
+# ==========================================
+type Query {
+  # User Queries
+  getUser(id: ID!): User
+  listUsers: [User!]!
+  
+  # Order Queries
+  getOrder(id: ID!): Order
+  listOrders: [Order!]!
+
+  # Tracking Queries
+  trackOrder(orderId: ID!): [OrderTracking!]!
+}
+
+type Mutation {
+  # User Mutations
+  createUser(input: CreateUserInput!): User!
+  updateUser(id: ID!, input: UpdateUserInput!): User!
+  deleteUser(id: ID!): String!
+
+  # Order Mutations
+  createOrder(input: CreateOrderInput!): Order!
+  updateOrder(id: ID!, input: UpdateOrderInput!): Order!
+  deleteOrder(id: ID!): String!
+
+  # Tracking Mutations
+  updateTracking(input: UpdateTrackingInput!): OrderTracking!
+}

@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package tracking;
+
+option go_package = "tracking_service/internal/proto";
+
+message OrderTracking {
+  string id       = 1;
+  string order_id = 2;
+  string status   = 3;
+  string location = 4;
+}
+
+message UpdateTrackingRequest {
+  string order_id = 1;
+  string status   = 2;
+  string location = 3;
+}
+message UpdateTrackingResponse { OrderTracking tracking = 1; }
+
+message TrackOrderRequest  { string order_id = 1; }
+message TrackOrderResponse { repeated OrderTracking trackings = 1; }
+
+service TrackingService {
+  rpc UpdateTracking(UpdateTrackingRequest) returns (UpdateTrackingResponse);
+  rpc TrackOrder(TrackOrderRequest) returns (TrackOrderResponse);
+}

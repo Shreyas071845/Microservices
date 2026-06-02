@@ -1,0 +1,520 @@
+{
+  "info": {
+    "name": "Microservices API Gateway",
+    "description": "GraphQL API Gateway integrating User, Order, and Tracking gRPC microservices with automated testing.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. User Service",
+      "item": [
+        {
+          "name": "Create User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "var jsonData = pm.response.json();",
+                  "pm.test(\"User was created successfully\", function () {",
+                  "    pm.expect(jsonData.errors).to.be.undefined;",
+                  "    pm.expect(jsonData.data.createUser.id).to.not.be.null;",
+                  "    pm.expect(jsonData.data.createUser.name).to.eql(\"John Doe\");",
+                  "});",
+                  "",
+                  "// Capture created user ID for subsequent requests",
+                  "pm.collectionVariables.set(\"userId\", jsonData.data.createUser.id);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/graphql",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["graphql"]
+            },
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation CreateUser($input: CreateUserInput!) {\n  createUser(input: $input) {\n    id\n    name\n    email\n  }\n}",
+                "variables": "{\n  \"input\": {\n    \"name\": \"John Doe\",\n    \"email\": \"john.{{$timestamp}}@example.com\"\n  }\n}"
+              }
+            }
+          }
+        },
+        {
+          "name": "List Users",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "var jsonData = pm.response.json();",
+                  "pm.test(\"Users list returned successfully\", function () {",
+                  "    pm.expect(jsonData.errors).to.be.undefined;",
+                  "    pm.expect(jsonData.data.listUsers).to.be.an(\"array\");",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/graphql",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["graphql"]
+            },
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query ListUsers {\n  listUsers {\n    id\n    name\n    email\n  }\n}"
+              }
+            }
+          }
+        },
+        {
+          "name": "Get User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "var jsonData = pm.response.json();",
+                  "pm.test(\"Successfully retrieved user\", function () {",
+                  "    pm.expect(jsonData.errors).to.be.undefined;",
+                  "    pm.expect(jsonData.data.getUser.id).to.eql(pm.collectionVariables.get(\"userId\"));",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/graphql",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["graphql"]
+            },
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query GetUser($id: ID!) {\n  getUser(id: $id) {\n    id\n    name\n    email\n  }\n}",
+                "variables": "{\n  \"id\": \"{{userId}}\"\n}"
+              }
+            }
+          }
+        },
+        {
+          "name": "Update User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "var jsonData = pm.response.json();",
+                  "pm.test(\"Successfully updated user name\", function () {",
+                  "    pm.expect(jsonData.errors).to.be.undefined;",
+                  "    pm.expect(jsonData.data.updateUser.name).to.eql(\"Jane Doe\");",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/graphql",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["graphql"]
+            },
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation UpdateUser($id: ID!, $input: UpdateUserInput!) {\n  updateUser(id: $id, input: $input) {\n    id\n    name\n    email\n  }\n}",
+                "variables": "{\n  \"id\": \"{{userId}}\",\n  \"input\": {\n    \"name\": \"Jane Doe\"\n  }\n}"
+              }
+            }
+          }
+        },
+        {
+          "name": "Delete User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "var jsonData = pm.response.json();",
+                  "pm.test(\"Successfully deleted user\", function () {",
+                  "    pm.expect(jsonData.errors).to.be.undefined;",
+                  "    pm.expect(jsonData.data.deleteUser).to.contain(\"deleted successfully\");",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/graphql",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["graphql"]
+            },
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation DeleteUser($id: ID!) {\n  deleteUser(id: $id)\n}",
+                "variables": "{\n  \"id\": \"{{userId}}\"\n}"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Order Service",
+      "item": [
+        {
+          "name": "Create Order",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "var jsonData = pm.response.json();",
+                  "pm.test(\"Order was placed successfully\", function () {",
+                  "    pm.expect(jsonData.errors).to.be.undefined;",
+                  "    pm.expect(jsonData.data.createOrder.id).to.not.be.null;",
+                  "    pm.expect(jsonData.data.createOrder.productName).to.eql(\"Wireless Mouse\");",
+                  "});",
+                  "",
+                  "// Capture order ID for subsequent requests",
+                  "pm.collectionVariables.set(\"orderId\", jsonData.data.createOrder.id);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/graphql",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["graphql"]
+            },
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation CreateOrder($input: CreateOrderInput!) {\n  createOrder(input: $input) {\n    id\n    userId\n    productName\n    quantity\n    status\n  }\n}",
+                "variables": "{\n  \"input\": {\n    \"userId\": \"{{userId}}\",\n    \"productName\": \"Wireless Mouse\",\n    \"quantity\": 2\n  }\n}"
+              }
+            }
+          }
+        },
+        {
+          "name": "List Orders",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "var jsonData = pm.response.json();",
+                  "pm.test(\"Orders list returned successfully\", function () {",
+                  "    pm.expect(jsonData.errors).to.be.undefined;",
+                  "    pm.expect(jsonData.data.listOrders).to.be.an(\"array\");",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/graphql",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["graphql"]
+            },
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query ListOrders {\n  listOrders {\n    id\n    userId\n    productName\n    quantity\n    status\n  }\n}"
+              }
+            }
+          }
+        },
+        {
+          "name": "Get Order",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "var jsonData = pm.response.json();",
+                  "pm.test(\"Successfully retrieved order details\", function () {",
+                  "    pm.expect(jsonData.errors).to.be.undefined;",
+                  "    pm.expect(jsonData.data.getOrder.id).to.eql(pm.collectionVariables.get(\"orderId\"));",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/graphql",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["graphql"]
+            },
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query GetOrder($id: ID!) {\n  getOrder(id: $id) {\n    id\n    userId\n    productName\n    quantity\n    status\n  }\n}",
+                "variables": "{\n  \"id\": \"{{orderId}}\"\n}"
+              }
+            }
+          }
+        },
+        {
+          "name": "Update Order",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "var jsonData = pm.response.json();",
+                  "pm.test(\"Successfully updated order status\", function () {",
+                  "    pm.expect(jsonData.errors).to.be.undefined;",
+                  "    pm.expect(jsonData.data.updateOrder.status).to.eql(\"shipped\");",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/graphql",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["graphql"]
+            },
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation UpdateOrder($id: ID!, $input: UpdateOrderInput!) {\n  updateOrder(id: $id, input: $input) {\n    id\n    userId\n    productName\n    quantity\n    status\n  }\n}",
+                "variables": "{\n  \"id\": \"{{orderId}}\",\n  \"input\": {\n    \"status\": \"shipped\"\n  }\n}"
+              }
+            }
+          }
+        },
+        {
+          "name": "Delete Order",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "var jsonData = pm.response.json();",
+                  "pm.test(\"Successfully deleted order\", function () {",
+                  "    pm.expect(jsonData.errors).to.be.undefined;",
+                  "    pm.expect(jsonData.data.deleteOrder).to.contain(\"deleted successfully\");",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/graphql",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["graphql"]
+            },
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation DeleteOrder($id: ID!) {\n  deleteOrder(id: $id)\n}",
+                "variables": "{\n  \"id\": \"{{orderId}}\"\n}"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Tracking Service",
+      "item": [
+        {
+          "name": "Update Tracking",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "var jsonData = pm.response.json();",
+                  "pm.test(\"Tracking entry added successfully\", function () {",
+                  "    pm.expect(jsonData.errors).to.be.undefined;",
+                  "    pm.expect(jsonData.data.updateTracking.orderId).to.eql(pm.collectionVariables.get(\"orderId\"));",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/graphql",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["graphql"]
+            },
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation UpdateTracking($input: UpdateTrackingInput!) {\n  updateTracking(input: $input) {\n    id\n    orderId\n    status\n    location\n  }\n}",
+                "variables": "{\n  \"input\": {\n    \"orderId\": \"{{orderId}}\",\n    \"status\": \"in_transit\",\n    \"location\": \"Distribution Center, NY\"\n  }\n}"
+              }
+            }
+          }
+        },
+        {
+          "name": "Track Order",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "var jsonData = pm.response.json();",
+                  "pm.test(\"Successfully tracked order events\", function () {",
+                  "    pm.expect(jsonData.errors).to.be.undefined;",
+                  "    pm.expect(jsonData.data.trackOrder).to.be.an(\"array\");",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/graphql",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["graphql"]
+            },
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query TrackOrder($orderId: ID!) {\n  trackOrder(orderId: $orderId) {\n    id\n    orderId\n    status\n    location\n  }\n}",
+                "variables": "{\n  \"orderId\": \"{{orderId}}\"\n}"
+              }
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "userId",
+      "value": ""
+    },
+    {
+      "key": "orderId",
+      "value": ""
+    }
+  ]
+}
