@@ -17,7 +17,6 @@ import (
 )
 
 func main() {
-	// Discover downstream services via environment variables (injected by Docker Compose)
 	userAddr := os.Getenv("USER_SERVICE_ADDR")
 	if userAddr == "" {
 		userAddr = "localhost:50051"
