@@ -15,4 +15,6 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Build API Gateway
-      run: docker build -t api-gateway ./api_gateway
+      run:
+        cd api_gateway
+        docker build -t api-gateway
