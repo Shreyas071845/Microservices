@@ -27,7 +27,7 @@ type OrderServer struct {
 func NewOrderServer() *OrderServer {
 	userAddr := os.Getenv("USER_SERVICE_ADDR")
 	if userAddr == "" {
-		userAddr = "localhost:50051"
+		log.Fatal("USER_SERVICE_ADDR environment variable is required")
 	}
 
 	conn, err := grpc.NewClient(userAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
@@ -37,7 +37,7 @@ func NewOrderServer() *OrderServer {
 
 	dbURL := os.Getenv("DATABASE_URL")
 	if dbURL == "" {
-		dbURL = "postgres://devuser:devpassword@localhost:5432/assignment_db?sslmode=disable"
+		log.Fatal("DATABASE_URL environment variable is required")
 	}
 
 	db, err := sql.Open("postgres", dbURL)
@@ -49,8 +49,8 @@ func NewOrderServer() *OrderServer {
 		log.Fatalf("Order service: failed to ping database: %v", err)
 	}
 
-	db.SetMaxOpenConns(25)
-	db.SetMaxIdleConns(25)
+	db.SetMaxOpenConns(10)
+	db.SetMaxIdleConns(5)
 	db.SetConnMaxLifetime(5 * time.Minute)
 
 	_, err = db.Exec(`

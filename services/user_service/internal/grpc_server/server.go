@@ -23,7 +23,7 @@ type UserServer struct {
 func NewUserServer() *UserServer {
 	dbURL := os.Getenv("DATABASE_URL")
 	if dbURL == "" {
-		dbURL = "postgres://devuser:devpassword@localhost:5432/assignment_db?sslmode=disable"
+		log.Fatal("DATABASE_URL environment variable is required")
 	}
 
 	db, err := sql.Open("postgres", dbURL)
@@ -35,8 +35,8 @@ func NewUserServer() *UserServer {
 		log.Fatalf("User service: failed to ping database: %v", err)
 	}
 
-	db.SetMaxOpenConns(25)
-	db.SetMaxIdleConns(25)
+	db.SetMaxOpenConns(10)
+	db.SetMaxIdleConns(5)
 	db.SetConnMaxLifetime(5 * time.Minute)
 
 	// Create users table if not exists

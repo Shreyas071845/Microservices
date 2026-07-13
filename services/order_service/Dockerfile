@@ -13,4 +13,5 @@ WORKDIR /app
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 USER appuser
 COPY --from=builder /grpc-server ./grpc-server
+EXPOSE 50052
 CMD ["./grpc-server"]

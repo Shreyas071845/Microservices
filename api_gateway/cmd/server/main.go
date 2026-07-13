@@ -29,15 +29,15 @@ func main() {
 
 	userAddr := os.Getenv("USER_SERVICE_ADDR")
 	if userAddr == "" {
-		userAddr = "localhost:50051"
+		log.Fatal("USER_SERVICE_ADDR environment variable is required")
 	}
 	orderAddr := os.Getenv("ORDER_SERVICE_ADDR")
 	if orderAddr == "" {
-		orderAddr = "localhost:50052"
+		log.Fatal("ORDER_SERVICE_ADDR environment variable is required")
 	}
 	trackingAddr := os.Getenv("TRACKING_SERVICE_ADDR")
 	if trackingAddr == "" {
-		trackingAddr = "localhost:50053"
+		log.Fatal("TRACKING_SERVICE_ADDR environment variable is required")
 	}
 
 	retryPolicy := `{"methodConfig": [{"name": [{"service": ""}], "retryPolicy": {"MaxAttempts": 4, "InitialBackoff": "0.1s", "MaxBackoff": "1s", "BackoffMultiplier": 2.0}}]}`

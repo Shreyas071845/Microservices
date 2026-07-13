@@ -27,7 +27,7 @@ type TrackingServer struct {
 func NewTrackingServer() *TrackingServer {
 	orderAddr := os.Getenv("ORDER_SERVICE_ADDR")
 	if orderAddr == "" {
-		orderAddr = "localhost:50052"
+		log.Fatal("ORDER_SERVICE_ADDR environment variable is required")
 	}
 
 	conn, err := grpc.NewClient(orderAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
@@ -37,7 +37,7 @@ func NewTrackingServer() *TrackingServer {
 
 	dbURL := os.Getenv("DATABASE_URL")
 	if dbURL == "" {
-		dbURL = "postgres://devuser:devpassword@localhost:5432/assignment_db?sslmode=disable"
+		log.Fatal("DATABASE_URL environment variable is required")
 	}
 
 	db, err := sql.Open("postgres", dbURL)
@@ -49,8 +49,8 @@ func NewTrackingServer() *TrackingServer {
 		log.Fatalf("Tracking service: failed to ping database: %v", err)
 	}
 
-	db.SetMaxOpenConns(25)
-	db.SetMaxIdleConns(25)
+	db.SetMaxOpenConns(10)
+	db.SetMaxIdleConns(5)
 	db.SetConnMaxLifetime(5 * time.Minute)
 
 	_, err = db.Exec(`

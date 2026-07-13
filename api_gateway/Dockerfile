@@ -13,4 +13,5 @@ WORKDIR /app
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 USER appuser
 COPY --from=builder /api-gateway ./api-gateway
+EXPOSE 8080
 CMD ["./api-gateway"]
