@@ -1,8 +1,11 @@
 FROM golang:alpine AS builder
-WORKDIR /app
-COPY go.mod go.sum ./
+WORKDIR /workspace
+COPY go.work go.work.sum ./
+COPY api_gateway/ api_gateway/
+COPY services/ services/
+COPY pkg/ pkg/
+WORKDIR /workspace/services/tracking_service
 RUN go mod download
-COPY . .
 RUN CGO_ENABLED=0 GOOS=linux go build -o /grpc-server ./cmd/server
 
 FROM alpine:latest

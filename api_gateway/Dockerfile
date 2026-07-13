@@ -1,9 +1,12 @@
 FROM golang:alpine AS builder
-WORKDIR /app
-COPY go.mod go.sum ./
+WORKDIR /workspace
+COPY go.work go.work.sum ./
+COPY api_gateway/ api_gateway/
+COPY services/ services/
+COPY pkg/ pkg/
+WORKDIR /workspace/api_gateway
 RUN go mod download
-COPY . .
-RUN CGO_ENABLED=0 GOOS=linux go build -o /api-gateway .
+RUN CGO_ENABLED=0 GOOS=linux go build -o /api-gateway ./cmd/server
 
 FROM alpine:latest
 WORKDIR /app

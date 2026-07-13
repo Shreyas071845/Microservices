@@ -12,7 +12,7 @@ import (
 	"google.golang.org/grpc/status"
 
 	_ "github.com/lib/pq"
-	pb "user_service/internal/proto"
+	pb "pb/userpb"
 )
 
 type UserServer struct {

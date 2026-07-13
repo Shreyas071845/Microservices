@@ -14,8 +14,8 @@ import (
 	"google.golang.org/grpc/status"
 
 	_ "github.com/lib/pq"
-	pb "tracking_service/internal/proto"
-	orderpb "tracking_service/internal/proto/orderpb"
+	pb "pb/trackingpb"
+	orderpb "pb/orderpb"
 )
 
 type TrackingServer struct {

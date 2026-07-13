@@ -6,7 +6,7 @@ require (
 	github.com/99designs/gqlgen v0.17.89
 	github.com/vektah/gqlparser/v2 v2.5.32
 	google.golang.org/grpc v1.65.0
-	google.golang.org/protobuf v1.36.11
+	pb v0.0.0-00010101000000-000000000000
 )
 
 require (
@@ -25,4 +25,7 @@ require (
 	golang.org/x/text v0.35.0 // indirect
 	golang.org/x/tools v0.43.0 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240711142825-46eb208f015d // indirect
+	google.golang.org/protobuf v1.36.11 // indirect
 )
+
+replace pb => ../pkg/pb

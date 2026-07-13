@@ -12,13 +12,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build API Gateway
-        run: docker build -t api-gateway -f api_gateway/Dockerfile api_gateway
+        run: docker build -t api-gateway -f api_gateway/Dockerfile .
       - name: Build User Service
-        run: docker build -t user-service -f services/user_service/Dockerfile services/user_service
+        run: docker build -t user-service -f services/user_service/Dockerfile .
       - name: Build Order Service
-        run: docker build -t order-service -f services/order_service/Dockerfile services/order_service
+        run: docker build -t order-service -f services/order_service/Dockerfile .
       - name: Build Tracking Service
-        run: docker build -t tracking-service -f services/tracking_service/Dockerfile services/tracking_service
+        run: docker build -t tracking-service -f services/tracking_service/Dockerfile .
 
   push:
     runs-on: ubuntu-latest
@@ -34,7 +34,7 @@ jobs:
       - name: Build and Push API Gateway
         uses: docker/build-push-action@v6
         with:
-          context: ./api_gateway
+          context: .
           file: ./api_gateway/Dockerfile
           push: true
           tags: shreyasbhat135/api-gateway:latest

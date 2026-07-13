@@ -23,8 +23,8 @@ services:
   # ──────────────────────────────────────────
   api-gateway:
     build:
-      context: ./api_gateway
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: api_gateway/Dockerfile
     ports:
       - "8080:8080"
     environment:
@@ -41,8 +41,8 @@ services:
   # ──────────────────────────────────────────
   user-server:
     build:
-      context: ./services/user_service
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: services/user_service/Dockerfile
     environment:
       - DATABASE_URL=postgres://devuser:devpassword@postgres-db:5432/assignment_db?sslmode=disable
     expose:
@@ -56,8 +56,8 @@ services:
   # ──────────────────────────────────────────
   order-server:
     build:
-      context: ./services/order_service
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: services/order_service/Dockerfile
     environment:
       - USER_SERVICE_ADDR=user-server:50051
       - DATABASE_URL=postgres://devuser:devpassword@postgres-db:5432/assignment_db?sslmode=disable
@@ -74,8 +74,8 @@ services:
   # ──────────────────────────────────────────
   tracking-server:
     build:
-      context: ./services/tracking_service
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: services/tracking_service/Dockerfile
     environment:
       - ORDER_SERVICE_ADDR=order-server:50052
       - DATABASE_URL=postgres://devuser:devpassword@postgres-db:5432/assignment_db?sslmode=disable

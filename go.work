@@ -5,4 +5,5 @@ use (
 	./services/order_service
 	./services/tracking_service
 	./services/user_service
+	./pkg/pb
 )

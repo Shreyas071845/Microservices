@@ -12,7 +12,7 @@ import (
 	healthpb "google.golang.org/grpc/health/grpc_health_v1"
 
 	"user_service/internal/grpc_server"
-	pb "user_service/internal/proto"
+	pb "pb/userpb"
 )
 
 func main() {

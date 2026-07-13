@@ -16,9 +16,9 @@ import (
 	"api_gateway/internal/apihandler"
 	"api_gateway/internal/resolver"
 
-	orderpb "api_gateway/internal/proto/orderpb"
-	trackingpb "api_gateway/internal/proto/trackingpb"
-	userpb "api_gateway/internal/proto/userpb"
+	orderpb "pb/orderpb"
+	trackingpb "pb/trackingpb"
+	userpb "pb/userpb"
 )
 
 func main() {

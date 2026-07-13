@@ -14,8 +14,8 @@ import (
 	"google.golang.org/grpc/status"
 
 	_ "github.com/lib/pq"
-	pb "order_service/internal/proto"
-	userpb "order_service/internal/proto/userpb"
+	pb "pb/orderpb"
+	userpb "pb/userpb"
 )
 
 type OrderServer struct {
