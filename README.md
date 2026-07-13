@@ -375,4 +375,6 @@ Contributions are what make the open source community such an amazing place to l
 
 ## 📄 License
 
+Copyright (c) 2026 Shreyas.
+
 Distributed under the MIT License. See `LICENSE` for more information.
