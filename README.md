@@ -73,6 +73,26 @@ Ensure you have the following installed:
 
 ---
 
+## 🌍 Production Deployment
+
+The project has been prepared for production deployment on platforms like Render, Railway, Fly.io, or Kubernetes. 
+
+### Configuration
+
+All services are configurable via environment variables. An example configuration is provided in `.env.example`.
+- **Ports**: API Gateway and gRPC services dynamically bind to `PORT` or fallback to defaults.
+- **Service Addresses**: `USER_SERVICE_ADDR`, `ORDER_SERVICE_ADDR`, and `TRACKING_SERVICE_ADDR` configure gRPC client dialing.
+- **Database**: Connect via `DATABASE_URL` with connection pooling configured for PostgreSQL.
+
+### Health Checks and Resilience
+
+- **HTTP**: The API Gateway exposes a `/healthz` endpoint for load balancers.
+- **gRPC**: Backend services implement `grpc_health_v1` for standard gRPC health probes.
+- **Graceful Shutdown**: All services listen for `SIGTERM`/`SIGINT` and shut down gracefully, draining connections safely.
+- **Resiliency**: gRPC clients are configured with a retry policy (MaxAttempts: 4) using `WithDefaultServiceConfig`.
+
+---
+
 ## 🧪 Testing with Postman
 
 A comprehensive Postman collection is included to test the API endpoints.

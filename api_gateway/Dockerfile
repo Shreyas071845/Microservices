@@ -7,5 +7,7 @@ RUN CGO_ENABLED=0 GOOS=linux go build -o /api-gateway .
 
 FROM alpine:latest
 WORKDIR /app
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+USER appuser
 COPY --from=builder /api-gateway ./api-gateway
 CMD ["./api-gateway"]

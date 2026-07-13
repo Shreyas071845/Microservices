@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"log"
 	"os"
+	"time"
 
 	"github.com/google/uuid"
 	"google.golang.org/grpc"
@@ -48,6 +49,10 @@ func NewOrderServer() *OrderServer {
 		log.Fatalf("Order service: failed to ping database: %v", err)
 	}
 
+	db.SetMaxOpenConns(25)
+	db.SetMaxIdleConns(25)
+	db.SetConnMaxLifetime(5 * time.Minute)
+
 	_, err = db.Exec(`
 		CREATE TABLE IF NOT EXISTS orders (
 			id UUID PRIMARY KEY,
@@ -66,6 +71,12 @@ func NewOrderServer() *OrderServer {
 	return &OrderServer{
 		db:         db,
 		userClient: userpb.NewUserServiceClient(conn),
+	}
+}
+
+func (s *OrderServer) Close() {
+	if s.db != nil {
+		s.db.Close()
 	}
 }
 
