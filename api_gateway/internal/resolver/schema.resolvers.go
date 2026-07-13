@@ -8,9 +8,9 @@ package resolver
 import (
 	"api_gateway/internal/graph"
 	"api_gateway/internal/graph/model"
-	"api_gateway/internal/proto/orderpb"
-	"api_gateway/internal/proto/trackingpb"
-	"api_gateway/internal/proto/userpb"
+	"pb/orderpb"
+	"pb/trackingpb"
+	"pb/userpb"
 	"context"
 	"fmt"
 	"log"

@@ -1,0 +1,9 @@
+go 1.25.3
+
+use (
+	./api_gateway
+	./services/order_service
+	./services/tracking_service
+	./services/user_service
+	./pkg/pb
+)

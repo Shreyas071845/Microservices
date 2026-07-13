@@ -1,0 +1,13 @@
+.git
+.gitignore
+.dockerignore
+.env
+.github
+node_modules
+*.exe
+*.log
+README.md
+architecture.png
+detailed_architecture_flow.png
+Microservices_API_Gateway.postman_collection.json
+docker-compose.yml

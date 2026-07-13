@@ -5,13 +5,14 @@ import (
 	"database/sql"
 	"log"
 	"os"
+	"time"
 
 	"github.com/google/uuid"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
 	_ "github.com/lib/pq"
-	pb "user_service/internal/proto"
+	pb "pb/userpb"
 )
 
 type UserServer struct {
@@ -34,6 +35,10 @@ func NewUserServer() *UserServer {
 		log.Fatalf("User service: failed to ping database: %v", err)
 	}
 
+	db.SetMaxOpenConns(25)
+	db.SetMaxIdleConns(25)
+	db.SetConnMaxLifetime(5 * time.Minute)
+
 	// Create users table if not exists
 	_, err = db.Exec(`
 		CREATE TABLE IF NOT EXISTS users (
@@ -48,6 +53,12 @@ func NewUserServer() *UserServer {
 
 	log.Println("User service connected to PostgreSQL successfully")
 	return &UserServer{db: db}
+}
+
+func (s *UserServer) Close() {
+	if s.db != nil {
+		s.db.Close()
+	}
 }
 
 func (s *UserServer) CreateUser(ctx context.Context, req *pb.CreateUserRequest) (*pb.CreateUserResponse, error) {

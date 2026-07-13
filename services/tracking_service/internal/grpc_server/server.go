@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"log"
 	"os"
+	"time"
 
 	"github.com/google/uuid"
 	"google.golang.org/grpc"
@@ -13,8 +14,8 @@ import (
 	"google.golang.org/grpc/status"
 
 	_ "github.com/lib/pq"
-	pb "tracking_service/internal/proto"
-	orderpb "tracking_service/internal/proto/orderpb"
+	pb "pb/trackingpb"
+	orderpb "pb/orderpb"
 )
 
 type TrackingServer struct {
@@ -48,6 +49,10 @@ func NewTrackingServer() *TrackingServer {
 		log.Fatalf("Tracking service: failed to ping database: %v", err)
 	}
 
+	db.SetMaxOpenConns(25)
+	db.SetMaxIdleConns(25)
+	db.SetConnMaxLifetime(5 * time.Minute)
+
 	_, err = db.Exec(`
 		CREATE TABLE IF NOT EXISTS trackings (
 			id UUID PRIMARY KEY,
@@ -65,6 +70,12 @@ func NewTrackingServer() *TrackingServer {
 	return &TrackingServer{
 		db:          db,
 		orderClient: orderpb.NewOrderServiceClient(conn),
+	}
+}
+
+func (s *TrackingServer) Close() {
+	if s.db != nil {
+		s.db.Close()
 	}
 }
 
