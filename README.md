@@ -330,25 +330,18 @@ While this is a robust foundation, a highly-scaled enterprise system would furth
 
 ---
 
-## 📸 Screenshots
+## 🌐 Deployment Status
 
-*(Placeholders for project demonstrations)*
+This project is deployment-ready and has been successfully validated in a local Docker Compose environment.
 
-| GraphQL Playground | Docker Compose Logs |
-|:---:|:---:|
-| `[GraphQL Screenshot Placeholder]` | `[Docker Logs Screenshot Placeholder]` |
+Cloud deployment is currently in progress while evaluating the most suitable platform for a production-style microservices architecture.
 
-| Postman Queries | Terminal Outputs |
-|:---:|:---:|
-| `[Postman Screenshot Placeholder]` | `[Terminal Logs Screenshot Placeholder]` |
+Once finalized, this section will include:
 
----
-
-## 🌐 Live Deployment
-
-* **Live GraphQL API:** `[Render/Fly.io Placeholder]`
-* **Health Endpoint:** `[Health Check URL Placeholder]`
-* **GitHub Repository:** `[GitHub URL Placeholder]`
+- Live GraphQL API endpoint
+- Health endpoint
+- Deployment architecture
+- Production deployment guide
 
 ---
 
